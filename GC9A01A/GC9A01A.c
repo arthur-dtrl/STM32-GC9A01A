@@ -8,7 +8,7 @@
 #include "GC9A01A.h"
 
 /*Array to help with channel selection*/
-const uint32_t tim_channels[] = {
+static const uint32_t tim_channels[] = {
     TIM_CHANNEL_1,
     TIM_CHANNEL_2,
     TIM_CHANNEL_3,
@@ -90,7 +90,6 @@ static void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd){
 	HAL_SPI_Transmit(lcd->hspi,&cmd,1,HAL_MAX_DELAY);
 
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_SET);
-
 }
 
 /*
@@ -110,7 +109,6 @@ static void GC9A01A_WriteData_Byte(GC9A01A *lcd, uint8_t b){
 	HAL_SPI_Transmit(lcd->hspi,&b,1,HAL_MAX_DELAY);
 
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_SET);
-
 }
 /*
  * Function: GC9A01A_WriteData_Word
