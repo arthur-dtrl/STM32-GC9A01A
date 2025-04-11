@@ -115,6 +115,10 @@ typedef struct {
 
 /*Functions declarations*/
 
+void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd);
+void GC9A01A_WriteData_Byte(GC9A01A *lcd, uint8_t b);
+void GC9A01A_WriteData_Word(GC9A01A *lcd, uint16_t w);
+
 void GC9A01A_Reset(GC9A01A *lcd);
 void GC9A01A_Init(GC9A01A *lcd);
 void GC9A01A_Sleep(GC9A01A *lcd);

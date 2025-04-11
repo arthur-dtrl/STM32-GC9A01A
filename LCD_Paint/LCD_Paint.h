@@ -11,8 +11,7 @@
 #include "GC9A01A.h"
 
 void LCD_DrawPixel(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t col);
-
-/*Drawing functions*/
+void LCD_DrawImage(GC9A01A* lcd,uint16_t x, uint16_t y,uint16_t w,uint16_t h,const uint16_t* img);
 void LCD_Fill(GC9A01A *lcd, uint16_t col);
 void LCD_FillWindow(GC9A01A *lcd, uint16_t x1, uint16_t y1, uint16_t w, uint16_t h, uint16_t col);
 

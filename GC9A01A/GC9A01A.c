@@ -83,7 +83,7 @@ static const uint8_t init_cmd[] = {
  *
  *   returns: None
  */
-static void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd){
+void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd){
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_RESET);
 
 	HAL_GPIO_WritePin(lcd->dc_gpio,lcd->dc_pin,GPIO_PIN_RESET);
@@ -102,7 +102,7 @@ static void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd){
  *
  *   returns: None
  */
-static void GC9A01A_WriteData_Byte(GC9A01A *lcd, uint8_t b){
+void GC9A01A_WriteData_Byte(GC9A01A *lcd, uint8_t b){
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_RESET);
 
 	HAL_GPIO_WritePin(lcd->dc_gpio,lcd->dc_pin,GPIO_PIN_SET);
@@ -120,7 +120,7 @@ static void GC9A01A_WriteData_Byte(GC9A01A *lcd, uint8_t b){
  *
  *   returns: None
  */
-static void GC9A01A_WriteData_Word(GC9A01A *lcd, uint16_t w){
+void GC9A01A_WriteData_Word(GC9A01A *lcd, uint16_t w){
 	uint8_t word_data[2]= { w >> 8 , w & 0xff};
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_RESET);
 
