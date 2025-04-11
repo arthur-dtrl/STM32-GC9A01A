@@ -132,7 +132,15 @@ static void GC9A01A_WriteData_Word(GC9A01A *lcd, uint16_t w){
 
 	HAL_GPIO_WritePin(lcd->cs_gpio,lcd->cs_pin,GPIO_PIN_SET);
 }
-
+/*
+ * Function: GC9A01A_Reset
+ * ----------------------------
+ *   Reset peripheral.
+ *
+ *   lcd: pointer to lcd object
+ *
+ *   returns: None
+ */
 void GC9A01A_Reset(GC9A01A *lcd){
 	HAL_GPIO_WritePin(lcd->rst_gpio,lcd->rst_pin,GPIO_PIN_SET);
 	HAL_Delay(100);
@@ -141,7 +149,15 @@ void GC9A01A_Reset(GC9A01A *lcd){
 	HAL_GPIO_WritePin(lcd->rst_gpio,lcd->rst_pin,GPIO_PIN_SET);
 	HAL_Delay(100);
 }
-
+/*
+ * Function: GC9A01A_Init
+ * ----------------------------
+ *   Initialize the peripheral by reseting,sending the display parameters through SPI communication, and setting up the PWM for backlight control.
+ *
+ *   lcd: pointer to lcd object
+ *
+ *   returns: None
+ */
 void GC9A01A_Init(GC9A01A *lcd){
   GC9A01A_Reset(lcd);
 
@@ -161,46 +177,107 @@ void GC9A01A_Init(GC9A01A *lcd){
   }
   HAL_TIM_PWM_Start(lcd->htim, tim_channels[lcd->tim_ch -1]);
 }
-
+/*
+ * Function: GC9A01A_Sleep
+ * ----------------------------
+ *   Put the peripheral in sleep mode.
+ *
+ *   lcd: pointer to lcd object
+ *
+ *   returns: None
+ */
 inline void GC9A01A_Sleep(GC9A01A *lcd){
 	 GC9A01A_WriteReg(lcd,GC9A01A_SLPON);
 	 HAL_Delay(120);
 }
-
+/*
+ * Function: GC9A01A_WakeUp
+ * ----------------------------
+ *   Put the peripheral out of sleep mode.
+ *
+ *   lcd: pointer to lcd object
+ *
+ *   returns: None
+ */
 inline void GC9A01A_WakeUp(GC9A01A *lcd){
 	GC9A01A_WriteReg(lcd,GC9A01A_SLPOFF);
 	HAL_Delay(120);
 }
-
+/*
+ * Function: GC9A01A_SetBacklight
+ * ----------------------------
+ *   Controls PWM for backlight.
+ *
+ *   lcd: pointer to lcd object
+ *   val: duty cycle between 0 and 100
+ *
+ *   returns: None
+ */
 void GC9A01A_SetBacklight(GC9A01A *lcd, uint8_t val){
 	if(val > 100 ) val = 100;
 	uint16_t cmd = 65535 * val / 100;
 	__HAL_TIM_SET_COMPARE(lcd->htim, tim_channels[lcd->tim_ch -1],cmd);
 }
-
-void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x1, uint16_t y1, uint16_t w,uint16_t h){
+/*
+ * Function: GC9A01A_SetWindow
+ * ----------------------------
+ *   Set the window in which data will be sent.
+ *
+ *   lcd: pointer to lcd object
+ *   x: window x start
+ *   y: window y start
+ *	 w: window width
+ *	 h: window height
+ *
+ *   returns: None
+ */
+void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t w,uint16_t h){
 	GC9A01A_WriteReg(lcd,GC9A01A_CASET);
 	GC9A01A_WriteData_Byte(lcd,0x00);
-	GC9A01A_WriteData_Byte(lcd,x1);
+	GC9A01A_WriteData_Byte(lcd,x);
 	GC9A01A_WriteData_Byte(lcd,0x00);
-	GC9A01A_WriteData_Byte(lcd,x1 + w - 1);
+	GC9A01A_WriteData_Byte(lcd,x + w - 1);
 
 	GC9A01A_WriteReg(lcd,GC9A01A_RASET);
 	GC9A01A_WriteData_Byte(lcd,0x00);
-	GC9A01A_WriteData_Byte(lcd,y1);
+	GC9A01A_WriteData_Byte(lcd,y);
 	GC9A01A_WriteData_Byte(lcd,0x00);
-	GC9A01A_WriteData_Byte(lcd,y1 + h - 1);
+	GC9A01A_WriteData_Byte(lcd,y + h - 1);
 
 	GC9A01A_WriteReg(lcd,GC9A01A_MEMWR);
 }
-
+/*
+ * Function: GC9A01A_SetWord
+ * ----------------------------
+ *   Send word in one pixel.
+ *
+ *   lcd: pointer to lcd object
+ *   x: window x start
+ *   y: window y start
+ *	 col: color data
+ *
+ *   returns: None
+ */
 void GC9A01A_SetWord(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t col){
 	GC9A01A_SetWindow(lcd,x,y,1,1);
 	GC9A01A_WriteData_Word(lcd,col);
 }
-
-void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x1, uint16_t y1, uint16_t w, uint16_t h, uint16_t col){
-	GC9A01A_SetWindow(lcd,x1,y1,w,h);
+/*
+ * Function: GC9A01A_FillWindow
+ * ----------------------------
+ *   Fill a window with a color.
+ *
+ *   lcd: pointer to lcd object
+ *   x: window x start
+ *   y: window y start
+ *   w: window width
+ *   h: window height
+ *	 col: color data
+ *
+ *   returns: None
+ */
+void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t col){
+	GC9A01A_SetWindow(lcd,x,y,w,h);
 	for(uint8_t i = 0; i < w ; i++){
 	    for(uint8_t j = 0; j < h ; j++){
 	      GC9A01A_WriteData_Word(lcd,col);

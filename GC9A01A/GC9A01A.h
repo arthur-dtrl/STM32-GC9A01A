@@ -121,8 +121,8 @@ void GC9A01A_Sleep(GC9A01A *lcd);
 void GC9A01A_WakeUp(GC9A01A *lcd);
 void GC9A01A_SetBacklight(GC9A01A *lcd, uint8_t val);
 
-void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x1, uint16_t y1, uint16_t w,uint16_t h);
+void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t w,uint16_t h);
 void GC9A01A_SetWord(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t col);
-void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x1, uint16_t y1, uint16_t w, uint16_t h, uint16_t col);
+void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t col);
 
 #endif /* __GC9A01A_H__ */
