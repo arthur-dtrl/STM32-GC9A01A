@@ -31,6 +31,7 @@ typedef struct {
 
 
 /*Memory Access Control*/
+
 #define GC9A01A_MAC_RGB 0x00
 #define GC9A01A_MAC_MH  0x04
 #define GC9A01A_MAC_BGR 0x08
@@ -40,6 +41,7 @@ typedef struct {
 #define GC9A01A_MAC_MY  0x80
 
 /* Command list */
+
 #define GC9A01A_SWRESET 		0x01   	//Software Reset
 #define GC9A01A_RDDID 			0x04    //Read display identification information
 #define GC9A01A_RDDST 			0x09    //Read Display Status
@@ -98,21 +100,6 @@ typedef struct {
 #define GC9A01A_INTREG1			0xFE 	//Inter register enable1
 #define GC9A01A_INTREG2			0xEF	//Inter register enable2
 
-/*Colors*/
-#define GC9A01A_BLACK			0x0000
-#define GC9A01A_DARKGREY 		0x7BEF
-#define GC9A01A_LIGHTGREY 		0xC618
-#define GC9A01A_WHITE			0xFFFF
-#define GC9A01A_MAGENTA			0xf81F
-#define GC9A01A_BLUE			0x001F
-#define GC9A01A_CYAN			0x07FF
-#define GC9A01A_GREEN			0x07E0
-#define GC9A01A_YELLOW			0xFFE0
-#define GC9A01A_ORANGE			0xFBC0
-#define GC9A01A_RED				0xF800
-#define GC9A01A_PINK 			0xFC18
-
-
 /*Functions declarations*/
 
 void GC9A01A_WriteReg(GC9A01A *lcd, uint8_t cmd);
@@ -124,9 +111,6 @@ void GC9A01A_Init(GC9A01A *lcd);
 void GC9A01A_Sleep(GC9A01A *lcd);
 void GC9A01A_WakeUp(GC9A01A *lcd);
 void GC9A01A_SetBacklight(GC9A01A *lcd, uint8_t val);
-
 void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t w,uint16_t h);
-void GC9A01A_SetWord(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t col);
-void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t col);
 
 #endif /* __GC9A01A_H__ */

@@ -8,6 +8,7 @@
 #include "GC9A01A.h"
 
 /*Array to help with channel selection*/
+
 static const uint32_t tim_channels[] = {
     TIM_CHANNEL_1,
     TIM_CHANNEL_2,
@@ -16,6 +17,7 @@ static const uint32_t tim_channels[] = {
 };
 
 /* Commands to setup the IC. The commands with //? are given by the manufacturers code but not present in the datasheet.*/
+
 static const uint8_t init_cmd[] = {
 		GC9A01A_INTREG2, 0,													  //Inter register enable2
 		0xEB, 1, 0x14,                                                        // ?
@@ -244,45 +246,5 @@ void GC9A01A_SetWindow(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t w,uint16_t
 
 	GC9A01A_WriteReg(lcd,GC9A01A_MEMWR);
 }
-/*
- * Function: GC9A01A_SetWord
- * ----------------------------
- *   Send word in one pixel.
- *
- *   lcd: pointer to lcd object
- *   x: window x start
- *   y: window y start
- *	 col: color data
- *
- *   returns: None
- */
-void GC9A01A_SetWord(GC9A01A *lcd, uint16_t x, uint16_t y, uint16_t col){
-	GC9A01A_SetWindow(lcd,x,y,1,1);
-	GC9A01A_WriteData_Word(lcd,col);
-}
-/*
- * Function: GC9A01A_FillWindow
- * ----------------------------
- *   Fill a window with a color.
- *
- *   lcd: pointer to lcd object
- *   x: window x start
- *   y: window y start
- *   w: window width
- *   h: window height
- *	 col: color data
- *
- *   returns: None
- */
-void GC9A01A_FillWindow(GC9A01A *lcd,uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t col){
-	GC9A01A_SetWindow(lcd,x,y,w,h);
-	for(uint8_t i = 0; i < w ; i++){
-	    for(uint8_t j = 0; j < h ; j++){
-	      GC9A01A_WriteData_Word(lcd,col);
-	    }
-	}
-}
-
-
 
 
