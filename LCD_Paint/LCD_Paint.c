@@ -6,6 +6,15 @@
  */
 #include "LCD_Paint.h"
 
+void resize_nearest_neighbor(const uint16_t* input, uint16_t* output, uint16_t width, uint16_t height, uint16_t new_w, uint16_t new_h) {
+    for (uint16_t y = 0; y < new_h; y++) {
+        uint16_t src_y = (uint16_t)y * height/(float)new_h;
+        for (uint16_t x = 0; x < new_w; x++) {
+            uint16_t src_x = (uint16_t)x * width/(float)new_w;
+            output[(y * new_w + x)] = input[(src_y * width + src_x)];
+        }
+    }
+}
 /*
  * Function: LCD_DrawPixel
  * ----------------------------
@@ -54,7 +63,8 @@ void LCD_DrawLine(GC9A01A* lcd, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
 /*
  * Function: LCD_DrawImage
  * ----------------------------
- *   Draw an image in a window.
+ *   Draw an image in a window. Format of the image : first two words of the array are image dimensions (width , height).
+ *   All the following words are the pixels of the image.
  *
  *   lcd: pointer to lcd object
  *   x: window x start
@@ -67,12 +77,23 @@ void LCD_DrawLine(GC9A01A* lcd, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
  */
 void LCD_DrawImage(GC9A01A* lcd,uint16_t x, uint16_t y,uint16_t w,uint16_t h,const uint16_t* img){
 	uint16_t *p = (uint16_t*)img;
+	uint16_t img_width = *p++;
+	uint16_t img_height = *p++;
+	uint16_t *resized ;
+	if(w == img_width && h == img_height);
+	else{
+		resized = malloc(w*h*sizeof(uint16_t));
+		if( resized == NULL) return;
+		resize_nearest_neighbor(p,resized,img_width,img_height, w, h);
+		p = resized;
+	}
 	GC9A01A_SetWindow(lcd, x, y, w, h);
 	for(uint16_t i = 0; i < w; i++){
 		for(uint16_t j = 0; j < h; j++){
 			GC9A01A_WriteData_Word(lcd,*p++);
 		}
 	}
+	if(!(w == img_width && h == img_height)) free(resized);
 }
 /*
  * Function: LCD_Fill

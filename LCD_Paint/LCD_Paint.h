@@ -9,6 +9,7 @@
 #define LCD_PAINT_H_
 
 #include "GC9A01A.h"
+#include "malloc.h"
 
 /*Colors*/
 #define LCD_BLACK			0x0000
